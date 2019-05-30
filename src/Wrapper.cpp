@@ -36,19 +36,19 @@
 #include <QtCore/QUrlQuery>
 #include <QtCore/QMimeDatabase>
 
-#include "../include/APIWrapper.h"
+#include "Wrapper.h"
 #include "models/Response.hpp"
 
-unsigned APIWrapper::userId = 0;
-QString APIWrapper::accessToken = "";
+unsigned Wrapper::userId = 0;
+QString Wrapper::accessToken = "";
 
 // init specified static fields
-template<> QString APIWrapper::Section<File>::prefix = "file";
-template<> QString APIWrapper::Section<Package>::prefix = "pkg";
-template<> QString APIWrapper::Section<Repository>::prefix = "repo";
+template<> QString Wrapper::Section<File>::prefix = "file";
+template<> QString Wrapper::Section<Package>::prefix = "pkg";
+template<> QString Wrapper::Section<Repository>::prefix = "repo";
 
 template<class Entity>
-QList<Entity *> APIWrapper::Section<Entity>::getAll() {
+QList<Entity *> Wrapper::Section<Entity>::getAll() {
     auto getUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
@@ -71,7 +71,7 @@ QList<Entity *> APIWrapper::Section<Entity>::getAll() {
 }
 
 template<class Entity>
-Entity *APIWrapper::Section<Entity>::get(unsigned id) {
+Entity *Wrapper::Section<Entity>::get(unsigned id) {
     auto getUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
                     QString::number(userId),
@@ -90,7 +90,7 @@ Entity *APIWrapper::Section<Entity>::get(unsigned id) {
 }
 
 template<>
-bool APIWrapper::Section<File>::upload(const File *file) {
+bool Wrapper::Section<File>::upload(const File *file) {
     auto uploadUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
@@ -121,7 +121,7 @@ bool APIWrapper::Section<File>::upload(const File *file) {
 }
 
 template<>
-bool APIWrapper::Section<Package>::upload(const Package *pkg) { // TODO: implement
+bool Wrapper::Section<Package>::upload(const Package *pkg) {
     auto updateUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
@@ -140,7 +140,7 @@ bool APIWrapper::Section<Package>::upload(const Package *pkg) { // TODO: impleme
 }
 
 template<>
-bool APIWrapper::Section<Repository>::upload(const Repository *repo) {
+bool Wrapper::Section<Repository>::upload(const Repository *repo) {
     auto updateUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
@@ -160,7 +160,7 @@ bool APIWrapper::Section<Repository>::upload(const Repository *repo) {
 }
 
 template<>
-bool APIWrapper::Section<File>::update(const File *file) {
+bool Wrapper::Section<File>::update(const File *file) {
     auto uploadUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
@@ -191,7 +191,7 @@ bool APIWrapper::Section<File>::update(const File *file) {
 }
 
 template<>
-bool APIWrapper::Section<Package>::update(const Package *pkg) {
+bool Wrapper::Section<Package>::update(const Package *pkg) {
     auto updateUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
@@ -209,7 +209,7 @@ bool APIWrapper::Section<Package>::update(const Package *pkg) {
 }
 
 template<>
-bool APIWrapper::Section<Repository>::update(const Repository *repo) { // TODO: implement
+bool Wrapper::Section<Repository>::update(const Repository *repo) {
     auto updateUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
@@ -228,7 +228,7 @@ bool APIWrapper::Section<Repository>::update(const Repository *repo) { // TODO: 
 }
 
 template<class Entity>
-bool APIWrapper::Section<Entity>::remove(unsigned id) {
+bool Wrapper::Section<Entity>::remove(unsigned id) {
     auto deleteFileUrl = QUrl(
             QString("http://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
                     QString::number(userId),
@@ -243,10 +243,10 @@ bool APIWrapper::Section<Entity>::remove(unsigned id) {
 
 // tell the compiler to "implement" methods from super class
 template
-class APIWrapper::Section<File>;
+class Wrapper::Section<File>;
 
 template
-class APIWrapper::Section<Package>;
+class Wrapper::Section<Package>;
 
 template
-class APIWrapper::Section<Repository>;
+class Wrapper::Section<Repository>;

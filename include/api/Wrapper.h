@@ -26,8 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef ANTARCTICA_APIWRAPPER_H
-#define ANTARCTICA_APIWRAPPER_H
+#ifndef ANTARCTICA_WRAPPER_H
+#define ANTARCTICA_WRAPPER_H
 
 
 #include <QtCore/QString>
@@ -35,10 +35,10 @@
 #include <QtNetwork/QHttpMultiPart>
 #include <QtCore/QJsonDocument>
 
-#include "models/File.h"
-#include "models/Package.h"
-#include "models/Repository.h"
-#include "models/Response.hpp"
+#include "api/models/File.h"
+#include "api/models/Package.h"
+#include "api/models/Repository.h"
+#include "api/models/Response.hpp"
 
 using namespace std;
 
@@ -49,7 +49,7 @@ using namespace std;
  * Class APIWrapper is a wrapper for server REST API and contains 3 subclasses:
  * Files, Packages and Repositories for interaction with specified API sections.
 */
-class APIWrapper {
+class Wrapper {
 public:
     /*!
      * \brief Set authentication data to static storage
@@ -184,4 +184,4 @@ private:
 };
 
 
-#endif //ANTARCTICA_APIWRAPPER_H
+#endif //ANTARCTICA_WRAPPER_H

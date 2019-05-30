@@ -5,9 +5,9 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QUrlQuery>
 
-#include "../include/APIWrapper.h"
+#include "api/Wrapper.h"
 
-QJsonDocument APIWrapper::Utils::execute(const QUrl &requestUrl, RequestType type) {
+QJsonDocument Wrapper::Utils::execute(const QUrl &requestUrl, RequestType type) {
     qDebug() << "Executing " + requestUrl.toString();
 
     auto manager = new QNetworkAccessManager;
@@ -35,7 +35,7 @@ QJsonDocument APIWrapper::Utils::execute(const QUrl &requestUrl, RequestType typ
 }
 
 QJsonDocument
-APIWrapper::Utils::executeForm(const QUrl &requestUrl, QHttpMultiPart *formData, APIWrapper::Utils::RequestType type) {
+Wrapper::Utils::executeForm(const QUrl &requestUrl, QHttpMultiPart *formData, Wrapper::Utils::RequestType type) {
     qDebug() << "Executing " + requestUrl.toString();
 
     auto manager = new QNetworkAccessManager;
@@ -64,7 +64,7 @@ APIWrapper::Utils::executeForm(const QUrl &requestUrl, QHttpMultiPart *formData,
 }
 
 QJsonDocument
-APIWrapper::Utils::executeForm(const QUrl &requestUrl, QUrlQuery &formData, APIWrapper::Utils::RequestType type) {
+Wrapper::Utils::executeForm(const QUrl &requestUrl, QUrlQuery &formData, Wrapper::Utils::RequestType type) {
     qDebug() << "Executing " + requestUrl.toString();
 
     auto manager = new QNetworkAccessManager;

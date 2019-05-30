@@ -3,12 +3,13 @@ project(icebreaker)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES include/APIWrapper.h src/APIWrapper.cpp src/APIWrapperUtils.cpp include/models/User.h include/models/File.h include/models/Package.h include/models/Repository.h include/models/Response.hpp)
+set(SOURCE_FILES include/api/Wrapper.h src/Wrapper.cpp src/WrapperUtils.cpp include/api/models/User.h include/api/models/File.h include/api/models/Package.h include/api/models/Repository.h include/api/models/Response.hpp)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Network REQUIRED)
 
-include_directories(include)
+include_directories(include/api)
 
 add_library(icebreaker SHARED ${SOURCE_FILES})
 
+target_include_directories(icebreaker PUBLIC include)
 target_link_libraries(icebreaker Qt5::Core Qt5::Network)

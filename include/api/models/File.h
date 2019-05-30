@@ -59,7 +59,7 @@ public:
             : id(id), name(move(name)), path(move(path)), content(move(content)),
               created(move(created)), modified(move(modified)) {}
 
-    File(QJsonObject &fileJson) {
+    explicit File(QJsonObject &fileJson) {
         id = fileJson["id"].toInt();
         name = fileJson["name"].toString();
         path = fileJson["path"].toString();
