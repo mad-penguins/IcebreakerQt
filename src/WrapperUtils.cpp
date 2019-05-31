@@ -13,6 +13,7 @@ QJsonDocument Wrapper::Utils::execute(const QUrl &requestUrl, RequestType type) 
     auto manager = new QNetworkAccessManager;
 
     QNetworkRequest request(requestUrl);
+    request.setSslConfiguration(sslConfiguration);
     QNetworkReply *reply;
     switch (type) {
         case GET:
@@ -41,6 +42,7 @@ Wrapper::Utils::executeForm(const QUrl &requestUrl, QHttpMultiPart *formData, Wr
     auto manager = new QNetworkAccessManager;
 
     QNetworkRequest request(requestUrl);
+    request.setSslConfiguration(sslConfiguration);
     QNetworkReply *reply;
     switch (type) {
         case POST:
@@ -70,6 +72,7 @@ Wrapper::Utils::executeForm(const QUrl &requestUrl, QUrlQuery &formData, Wrapper
     auto manager = new QNetworkAccessManager;
 
     QNetworkRequest request(requestUrl);
+    request.setSslConfiguration(sslConfiguration);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     QNetworkReply *reply;
     switch (type) {

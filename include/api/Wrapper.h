@@ -34,6 +34,7 @@
 #include <QtCore/QJsonArray>
 #include <QtNetwork/QHttpMultiPart>
 #include <QtCore/QJsonDocument>
+#include <QtNetwork/QSslConfiguration>
 
 #include "api/models/File.h"
 #include "api/models/Package.h"
@@ -55,10 +56,12 @@ public:
      * \brief Set authentication data to static storage
      * \param id
      * \param token
+     * \param sslConfig
      */
-    static void setUserData(unsigned id, QString token) {
+    static void init(unsigned id, QString token, const QSslConfiguration& sslConfig) {
         userId = id;
         accessToken = move(token);
+        sslConfiguration = sslConfig;
     }
 
     /*!
@@ -136,6 +139,7 @@ public:
 private:
     static unsigned userId; /**< User id needed for API accessing */
     static QString accessToken; /**< Session access token needed for API authentication */
+    static QSslConfiguration sslConfiguration; /**< An SSL configuration to perform an encrypted connection */
 
     /*!
      * \class APIWrapper::Utils

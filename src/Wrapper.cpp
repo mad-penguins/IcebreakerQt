@@ -41,6 +41,7 @@
 
 unsigned Wrapper::userId = 0;
 QString Wrapper::accessToken = "";
+QSslConfiguration Wrapper::sslConfiguration = QSslConfiguration::defaultConfiguration();
 
 // init specified static fields
 template<> QString Wrapper::Section<File>::prefix = "file";
@@ -50,7 +51,7 @@ template<> QString Wrapper::Section<Repository>::prefix = "repo";
 template<class Entity>
 QList<Entity *> Wrapper::Section<Entity>::getAll() {
     auto getUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
                     prefix,
                     accessToken)
@@ -73,7 +74,7 @@ QList<Entity *> Wrapper::Section<Entity>::getAll() {
 template<class Entity>
 Entity *Wrapper::Section<Entity>::get(unsigned id) {
     auto getUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
                     QString::number(userId),
                     prefix,
                     QString::number(id),
@@ -92,7 +93,7 @@ Entity *Wrapper::Section<Entity>::get(unsigned id) {
 template<>
 bool Wrapper::Section<File>::upload(const File *file) {
     auto uploadUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
                     prefix,
                     accessToken
@@ -123,7 +124,7 @@ bool Wrapper::Section<File>::upload(const File *file) {
 template<>
 bool Wrapper::Section<Package>::upload(const Package *pkg) {
     auto updateUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
                     prefix,
                     accessToken
@@ -142,7 +143,7 @@ bool Wrapper::Section<Package>::upload(const Package *pkg) {
 template<>
 bool Wrapper::Section<Repository>::upload(const Repository *repo) {
     auto updateUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
                     prefix,
                     accessToken
@@ -162,7 +163,7 @@ bool Wrapper::Section<Repository>::upload(const Repository *repo) {
 template<>
 bool Wrapper::Section<File>::update(const File *file) {
     auto uploadUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
                     prefix,
                     accessToken
@@ -193,7 +194,7 @@ bool Wrapper::Section<File>::update(const File *file) {
 template<>
 bool Wrapper::Section<Package>::update(const Package *pkg) {
     auto updateUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
                     prefix,
                     accessToken
@@ -211,7 +212,7 @@ bool Wrapper::Section<Package>::update(const Package *pkg) {
 template<>
 bool Wrapper::Section<Repository>::update(const Repository *repo) {
     auto updateUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
                     QString::number(userId),
                     prefix,
                     accessToken
@@ -230,7 +231,7 @@ bool Wrapper::Section<Repository>::update(const Repository *repo) {
 template<class Entity>
 bool Wrapper::Section<Entity>::remove(unsigned id) {
     auto deleteFileUrl = QUrl(
-            QString("http://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
+            QString("https://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
                     QString::number(userId),
                     prefix,
                     QString::number(id),
