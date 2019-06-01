@@ -12,7 +12,7 @@ public:
     public:
         enum Code {
             NotFound = 1, InvalidToken = 2, FormParsingError = 3, AlreadyExists = 4,
-            OK = 0, NoResponse = -1, MissingFields = -2
+            OK = 0, NoResponse = -1, MissingFields = -2, WrongLogin = -3
         } code = Code::NoResponse;
         QString text = "got no response";
 
@@ -25,6 +25,12 @@ public:
             text = errJson["text"].toString();
         }
     } error;
+
+    class Exception : public exception {
+    public:
+        Error::Code code;
+        explicit Exception(Error::Code code) : code(code) {}
+    };
 
     explicit Response(QJsonObject respJson) {
         ok = respJson["ok"].toBool();

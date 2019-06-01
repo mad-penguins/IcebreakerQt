@@ -39,9 +39,38 @@
 #include "Wrapper.h"
 #include "models/Response.hpp"
 
-unsigned Wrapper::userId = 0;
-QString Wrapper::accessToken = "";
+User Wrapper::user = User();
 QSslConfiguration Wrapper::sslConfiguration = QSslConfiguration::defaultConfiguration();
+
+User Wrapper::authorize(const QString &login, const QString &password) {
+    auto loginUrl = QUrl("https://antarctica-server.tk/api/login");
+
+    QUrlQuery formData;
+    formData.addQueryItem("login", login);
+    formData.addQueryItem("password", password);
+
+    auto json = Utils::executeForm(loginUrl, formData, Utils::POST);
+    auto obj = json.object();
+    if (!Utils::checkResponse(Response(json.object()))) { // TODO: CHANGE RESPONSE SPECIFICATION ON THE SERVER!!!
+        switch (obj["error"].toString().toInt()) {
+            case -1:
+            case -2:
+                throw Response::Exception(Response::Error::WrongLogin);
+            default:
+                break;
+        }
+    }
+
+    if (!obj.keys().contains("id")
+        && !obj.keys().contains("login")
+        && !obj.keys().contains("name")
+        && !obj.keys().contains("token")) {
+        throw Response::Exception(Response::Error::MissingFields);
+    }
+    auto usr = User(obj);
+    Wrapper::user = usr;
+    return usr;
+}
 
 // init specified static fields
 template<> QString Wrapper::Section<File>::prefix = "file";
@@ -52,9 +81,9 @@ template<class Entity>
 QList<Entity *> Wrapper::Section<Entity>::getAll() {
     auto getUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
-                    accessToken)
+                    user.accessToken)
     );
     auto json = Utils::execute(getUrl, Utils::GET);
 
@@ -75,10 +104,10 @@ template<class Entity>
 Entity *Wrapper::Section<Entity>::get(unsigned id) {
     auto getUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
                     QString::number(id),
-                    accessToken
+                    user.accessToken
             )
     );
     auto json = Utils::execute(getUrl, Utils::GET);
@@ -94,9 +123,9 @@ template<>
 bool Wrapper::Section<File>::upload(const File *file) {
     auto uploadUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
-                    accessToken
+                    user.accessToken
             )
     );
     auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
@@ -125,9 +154,9 @@ template<>
 bool Wrapper::Section<Package>::upload(const Package *pkg) {
     auto updateUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
-                    accessToken
+                    user.accessToken
             )
     );
 
@@ -144,9 +173,9 @@ template<>
 bool Wrapper::Section<Repository>::upload(const Repository *repo) {
     auto updateUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
-                    accessToken
+                    user.accessToken
             )
     );
 
@@ -164,9 +193,9 @@ template<>
 bool Wrapper::Section<File>::update(const File *file) {
     auto uploadUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
-                    accessToken
+                    user.accessToken
             )
     );
     auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
@@ -195,9 +224,9 @@ template<>
 bool Wrapper::Section<Package>::update(const Package *pkg) {
     auto updateUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
-                    accessToken
+                    user.accessToken
             )
     );
 
@@ -213,9 +242,9 @@ template<>
 bool Wrapper::Section<Repository>::update(const Repository *repo) {
     auto updateUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
-                    accessToken
+                    user.accessToken
             )
     );
 
@@ -232,10 +261,10 @@ template<class Entity>
 bool Wrapper::Section<Entity>::remove(unsigned id) {
     auto deleteFileUrl = QUrl(
             QString("https://antarctica-server.tk/api/user/%1/%2/%3/%4").arg(
-                    QString::number(userId),
+                    QString::number(user.id),
                     prefix,
                     QString::number(id),
-                    accessToken
+                    user.accessToken
             )
     );
     auto json = Utils::execute(deleteFileUrl, Utils::DELETE);

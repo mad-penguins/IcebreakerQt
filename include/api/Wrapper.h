@@ -36,6 +36,7 @@
 #include <QtCore/QJsonDocument>
 #include <QtNetwork/QSslConfiguration>
 
+#include "api/models/User.h"
 #include "api/models/File.h"
 #include "api/models/Package.h"
 #include "api/models/Repository.h"
@@ -58,11 +59,16 @@ public:
      * \param token
      * \param sslConfig
      */
-    static void init(unsigned id, QString token, const QSslConfiguration& sslConfig) {
-        userId = id;
-        accessToken = move(token);
+    static void init(const QSslConfiguration& sslConfig) {
         sslConfiguration = sslConfig;
     }
+
+    /*!
+     * \brief Authorize the user
+     * \param login
+     * \param password
+     */
+    static User authorize(const QString &login, const QString &password);
 
     /*!
      * \class APIWrapper::Section
@@ -137,8 +143,7 @@ public:
     };
 
 private:
-    static unsigned userId; /**< User id needed for API accessing */
-    static QString accessToken; /**< Session access token needed for API authentication */
+    static User user; /**< User needed for API accessing */
     static QSslConfiguration sslConfiguration; /**< An SSL configuration to perform an encrypted connection */
 
     /*!
