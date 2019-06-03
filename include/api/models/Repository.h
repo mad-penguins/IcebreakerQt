@@ -31,6 +31,7 @@
 
 
 #include <QtCore/QString>
+#include <QtCore/QJsonObject>
 
 using namespace std;
 
