@@ -38,10 +38,11 @@
 #include <QtCore/QVariant>
 
 #include "Package.h"
+#include "Entity.h"
 
 using namespace std;
 
-class File {
+class File : public Entity {
 public:
     unsigned id;
     QString name;

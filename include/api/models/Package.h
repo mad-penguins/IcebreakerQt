@@ -32,10 +32,11 @@
 
 #include <QtCore/QString>
 #include "Repository.h"
+#include "Entity.h"
 
 using namespace std;
 
-class Package {
+class Package : public Entity {
 public:
     unsigned id;
     QString name;

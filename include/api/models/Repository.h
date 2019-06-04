@@ -32,10 +32,11 @@
 
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
+#include "Entity.h"
 
 using namespace std;
 
-class Repository {
+class Repository : public Entity {
 public:
     unsigned id;
     QString name;
