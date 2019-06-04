@@ -59,7 +59,7 @@ public:
      * \param token
      * \param sslConfig
      */
-    static void init(const QSslConfiguration& sslConfig) {
+    static void init(const QSslConfiguration &sslConfig) {
         sslConfiguration = sslConfig;
     }
 
@@ -181,7 +181,7 @@ private:
 
         static QJsonDocument executeForm(const QUrl &requestUrl, QUrlQuery &formData, RequestType type);
 
-        static bool checkResponse(Response resp) {
+        static bool checkResponse(const Response &resp) {
             if (!resp.ok) {
                 qDebug() << "Error code " << resp.error.code << ": " << resp.error.text;
                 return false;

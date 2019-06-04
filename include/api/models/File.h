@@ -44,13 +44,13 @@ using namespace std;
 
 class File : public Entity {
 public:
-    unsigned id;
+    int id;
     QString name;
     QString path;
     QByteArray content;
     QDateTime created;
     QDateTime modified;
-    Package *package;
+    Package *package{};
 
     File(int id, QString name, QString path, QDateTime created, QDateTime modified, uint packageId)
             : id(id), name(move(name)), path(move(path)),

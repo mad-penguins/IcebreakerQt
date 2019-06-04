@@ -38,7 +38,7 @@ using namespace std;
 
 class Repository : public Entity {
 public:
-    unsigned id;
+    int id;
     QString name;
     QString url;
     QString manager;

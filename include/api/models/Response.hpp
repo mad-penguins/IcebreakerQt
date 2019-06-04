@@ -29,6 +29,7 @@ public:
     class Exception : public exception {
     public:
         Error::Code code;
+
         explicit Exception(Error::Code code) : code(code) {}
     };
 

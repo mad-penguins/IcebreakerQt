@@ -38,9 +38,9 @@ using namespace std;
 
 class Package : public Entity {
 public:
-    unsigned id;
+    int id;
     QString name;
-    Repository *repository;
+    Repository *repository{};
 
     Package(int id, QString name, uint repoId) : id(id), name(move(name)) {}
 

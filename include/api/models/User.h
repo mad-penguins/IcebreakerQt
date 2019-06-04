@@ -38,7 +38,7 @@ using namespace std;
 
 class User {
 public:
-    explicit User (QJsonObject userJson) {
+    explicit User(QJsonObject userJson) {
         id = userJson["id"].toInt();
         login = userJson["login"].toString();
         displayName = userJson["name"].toString();
@@ -47,7 +47,7 @@ public:
 
     User() = default;
 
-    unsigned id{};
+    int id{};
     QString login;
     QString displayName;
     QString accessToken;
