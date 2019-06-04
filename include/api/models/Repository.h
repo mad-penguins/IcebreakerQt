@@ -32,6 +32,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
+
 #include "Entity.h"
 
 using namespace std;
@@ -43,7 +44,7 @@ public:
     QString url;
     QString manager;
 
-    Repository(int id, QString name, QString url, QString manager)
+    explicit Repository(int id = 1, QString name = "", QString url = "", QString manager = "")
             : id(id), name(move(name)), url(move(url)), manager(move(manager)) {}
 
     explicit Repository(QJsonObject repoJson) {

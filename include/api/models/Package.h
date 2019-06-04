@@ -32,6 +32,7 @@
 
 #include <QtCore/QString>
 #include "Repository.h"
+
 #include "Entity.h"
 
 using namespace std;
@@ -42,7 +43,8 @@ public:
     QString name;
     Repository *repository{};
 
-    Package(int id, QString name, uint repoId) : id(id), name(move(name)) {}
+    explicit Package(int id = 1, QString name = "", const Repository *repo = new Repository())
+            : id(id), name(move(name)), repository(const_cast<Repository *>(repo)) {}
 
     explicit Package(QJsonObject pkgJson) {
         id = pkgJson["id"].toInt();

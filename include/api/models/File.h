@@ -50,15 +50,13 @@ public:
     QByteArray content;
     QDateTime created;
     QDateTime modified;
-    Package *package{};
+    Package *package;
 
-    File(int id, QString name, QString path, QDateTime created, QDateTime modified, uint packageId)
+    File(int id, QString name, QString path, QDateTime created, QDateTime modified,
+         QByteArray content = QByteArray(), const Package *pkg = new Package())
             : id(id), name(move(name)), path(move(path)),
-              created(move(created)), modified(move(modified)) {}
-
-    File(int id, QString name, QString path, QByteArray content, QDateTime created, QDateTime modified, uint packageId)
-            : id(id), name(move(name)), path(move(path)), content(move(content)),
-              created(move(created)), modified(move(modified)) {}
+              created(move(created)), modified(move(modified)),
+              content(move(content)), package(const_cast<Package *>(pkg)) {}
 
     explicit File(QJsonObject &fileJson) {
         id = fileJson["id"].toInt();

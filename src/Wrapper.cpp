@@ -90,12 +90,12 @@ QList<Entity *> Wrapper::Section<Entity>::getAll() {
     QList<Entity *> objects;
     if (Utils::checkResponse(Response(json.object()))) {
         auto respJson = json[prefix + "s"].toArray();
-                foreach (QJsonValue val, respJson) {
-                if (val.isObject()) {
-                    auto fileJson = val.toObject();
-                    objects << new Entity(fileJson);
-                }
+        for (auto &&val : respJson) {
+            if (val.isObject()) {
+                auto fileJson = val.toObject();
+                objects << new Entity(fileJson);
             }
+        }
     }
     return objects;
 }
