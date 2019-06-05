@@ -39,6 +39,10 @@
 #include "Wrapper.h"
 #include "models/Response.hpp"
 
+Package Package::_default = Package(1, "");
+Repository Repository::_noRepo = Repository(1, "", "", "");
+Repository Repository::_default = Repository(2, "Default", "", "");
+
 User Wrapper::user = User();
 QSslConfiguration Wrapper::sslConfiguration = QSslConfiguration::defaultConfiguration();
 

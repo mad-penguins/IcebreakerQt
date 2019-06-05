@@ -38,13 +38,16 @@
 using namespace std;
 
 class Repository : public Entity {
+    static Repository _noRepo;
+    static Repository _default;
+
 public:
     int id;
     QString name;
     QString url;
     QString manager;
 
-    explicit Repository(int id = 1, QString name = "", QString url = "", QString manager = "")
+    explicit Repository(int id, QString name, QString url, QString manager)
             : id(id), name(move(name)), url(move(url)), manager(move(manager)) {}
 
     explicit Repository(QJsonObject repoJson) {
@@ -53,7 +56,11 @@ public:
         url = repoJson["url"].toString();
         manager = repoJson["manager"].toString();
     }
+
+    static constexpr Repository *NoRepo = &Repository::_noRepo;
+    static constexpr Repository *Default = &Repository::_default;
 };
+
 
 
 #endif //ANTARCTICA_REPOSITORY_H

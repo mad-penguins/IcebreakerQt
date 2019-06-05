@@ -53,13 +53,13 @@ public:
     Package *package;
 
     File(QString name, QString path, QDateTime created, QDateTime modified,
-         QByteArray content = QByteArray(), const Package *pkg = new Package())
+         QByteArray content = QByteArray(), const Package *pkg = Package::Default)
             : name(move(name)), path(move(path)),
               created(move(created)), modified(move(modified)),
               content(move(content)), package(const_cast<Package *>(pkg)) {}
 
     File(int id, QString name, QString path, QDateTime created, QDateTime modified,
-         QByteArray content = QByteArray(), const Package *pkg = new Package())
+         QByteArray content = QByteArray(), const Package *pkg = Package::Default)
             : id(id), name(move(name)), path(move(path)),
               created(move(created)), modified(move(modified)),
               content(move(content)), package(const_cast<Package *>(pkg)) {}

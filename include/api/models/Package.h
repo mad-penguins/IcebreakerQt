@@ -38,12 +38,13 @@
 using namespace std;
 
 class Package : public Entity {
+    static Package _default;
 public:
     int id;
     QString name;
     Repository *repository{};
 
-    explicit Package(int id = 1, QString name = "", const Repository *repo = new Repository())
+    explicit Package(int id, QString name, const Repository *repo = Repository::NoRepo)
             : id(id), name(move(name)), repository(const_cast<Repository *>(repo)) {}
 
     explicit Package(QJsonObject pkgJson) {
@@ -51,6 +52,8 @@ public:
         name = pkgJson["name"].toString();
         repository = new Repository(pkgJson["repository"].toObject());
     }
+
+    static constexpr Package *Default = &_default;
 };
 
 
