@@ -50,24 +50,20 @@ User Wrapper::authorize(const QString &login, const QString &password) {
     formData.addQueryItem("password", password);
 
     auto json = Utils::executeForm(loginUrl, formData, Utils::POST);
-    auto obj = json.object();
-    if (!Utils::checkResponse(Response(json.object()))) { // TODO: CHANGE RESPONSE SPECIFICATION ON THE SERVER!!!
-        switch (obj["error"].toString().toInt()) {
-            case -1:
-            case -2:
-                throw Response::Exception(Response::Error::WrongLogin);
-            default:
-                break;
-        }
+    auto respJson = json.object();
+
+    if (!Utils::checkResponse(Response(respJson))) {
+        throw Response::Exception(Response::Error::WrongLogin);
     }
 
-    if (!obj.keys().contains("id")
-        && !obj.keys().contains("login")
-        && !obj.keys().contains("name")
-        && !obj.keys().contains("token")) {
+    auto userJson = respJson["user"].toObject();
+    if (!userJson.keys().contains("id")
+        && !userJson.keys().contains("login")
+        && !userJson.keys().contains("name")
+        && !userJson.keys().contains("token")) {
         throw Response::Exception(Response::Error::MissingFields);
     }
-    auto usr = User(obj);
+    auto usr = User(userJson);
     Wrapper::user = usr;
     return usr;
 }

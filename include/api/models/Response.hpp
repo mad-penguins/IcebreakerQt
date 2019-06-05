@@ -11,8 +11,8 @@ public:
     class Error {
     public:
         enum Code {
-            NotFound = 1, InvalidToken = 2, FormParsingError = 3, AlreadyExists = 4,
-            OK = 0, NoResponse = -1, MissingFields = -2, WrongLogin = -3
+            NotFound = 1, InvalidToken = 2, FormParsingError = 3, AlreadyExists = 4, WrongLogin = 5,
+            OK = 0, NoResponse = -1, MissingFields = -2
         } code = Code::NoResponse;
         QString text = "got no response";
 
@@ -43,9 +43,13 @@ public:
                   || (respJson.contains("pkgs") && respJson["pkgs"].isArray())
                   || (respJson.contains("pkg") && respJson["pkg"].isObject())
                   || (respJson.contains("repos") && respJson["repos"].isArray())
-                  || (respJson.contains("repo") && respJson["repo"].isObject()))) {
+                  || (respJson.contains("repo") && respJson["repo"].isObject())
+                  || (respJson.contains("user") && respJson["user"].isObject()))) {
             ok = false;
             error = Error(Error::Code::MissingFields);
+        }
+        if (ok) {
+            error = Error(Error::OK);
         }
     }
 };
