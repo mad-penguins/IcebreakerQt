@@ -44,13 +44,19 @@ using namespace std;
 
 class File : public Entity {
 public:
-    int id;
+    int id{};
     QString name;
     QString path;
     QByteArray content;
     QDateTime created;
     QDateTime modified;
     Package *package;
+
+    File(QString name, QString path, QDateTime created, QDateTime modified,
+         QByteArray content = QByteArray(), const Package *pkg = new Package())
+            : name(move(name)), path(move(path)),
+              created(move(created)), modified(move(modified)),
+              content(move(content)), package(const_cast<Package *>(pkg)) {}
 
     File(int id, QString name, QString path, QDateTime created, QDateTime modified,
          QByteArray content = QByteArray(), const Package *pkg = new Package())

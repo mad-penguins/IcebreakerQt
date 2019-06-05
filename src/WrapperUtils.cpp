@@ -95,3 +95,33 @@ Wrapper::Utils::executeForm(const QUrl &requestUrl, QUrlQuery &formData, Wrapper
     reply->deleteLater();
     return json;
 }
+
+QHttpMultiPart *Wrapper::Utils::generateMultipart(const File *file) {
+    auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+    QHttpPart pathPart;
+    pathPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="path")"));
+    pathPart.setBody(file->path.toUtf8());
+    multiPart->append(pathPart);
+
+    QHttpPart createdTimePart;
+    createdTimePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="created")"));
+    createdTimePart.setBody(QByteArray::number(file->created.toSecsSinceEpoch()));
+    multiPart->append(createdTimePart);
+
+    QHttpPart modifiedTimePart;
+    modifiedTimePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="modified")"));
+    modifiedTimePart.setBody(QByteArray::number(file->modified.toSecsSinceEpoch()));
+    multiPart->append(modifiedTimePart);
+
+    QHttpPart fileDataPart;
+    fileDataPart.setHeader(
+            QNetworkRequest::ContentDispositionHeader,
+            QVariant(QString(R"(form-data; name="upload"; filename="%1")").arg(file->name))
+    );
+    fileDataPart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+    fileDataPart.setBody(file->content);
+    multiPart->append(fileDataPart);
+
+    return multiPart;
+}

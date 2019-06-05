@@ -188,6 +188,8 @@ private:
             }
             return true;
         }
+
+        static QHttpMultiPart *generateMultipart(const File* file);
     };
 
 };

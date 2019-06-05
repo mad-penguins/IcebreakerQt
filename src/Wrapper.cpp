@@ -124,25 +124,7 @@ bool Wrapper::Section<File>::upload(const File *file) {
                     user.accessToken
             )
     );
-    auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-    QHttpPart contentPart;
-    contentPart.setHeader(
-            QNetworkRequest::ContentDispositionHeader,
-            QString(
-                    R"(form-data; name="%1"; path="%2"; created="%3"; modified="%4"; package_id="%5")").arg(
-                    file->name,
-                    file->path,
-                    QString::number(file->created.toSecsSinceEpoch()),
-                    QString::number(file->modified.toSecsSinceEpoch()),
-                    QString::number(file->package->id)
-            )
-    );
-    contentPart.setHeader(QNetworkRequest::ContentTypeHeader, QMimeDatabase().mimeTypeForData(file->content).name());
-    contentPart.setBody(file->content);
-    multiPart->append(contentPart);
-
-    auto json = Utils::executeForm(uploadUrl, multiPart, Utils::POST);
+    auto json = Utils::executeForm(uploadUrl, Utils::generateMultipart(file), Utils::POST);
     return Utils::checkResponse(Response(json.object()));
 }
 
@@ -194,25 +176,7 @@ bool Wrapper::Section<File>::update(const File *file) {
                     user.accessToken
             )
     );
-    auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-    QHttpPart contentPart;
-    contentPart.setHeader(
-            QNetworkRequest::ContentDispositionHeader,
-            QString(
-                    R"(form-data; name="%1"; path="%2"; created="%3"; modified="%4"; package_id="%5")").arg(
-                    file->name,
-                    file->path,
-                    QString::number(file->created.toSecsSinceEpoch()),
-                    QString::number(file->modified.toSecsSinceEpoch()),
-                    QString::number(file->package->id)
-            )
-    );
-    contentPart.setHeader(QNetworkRequest::ContentTypeHeader, QMimeDatabase().mimeTypeForData(file->content).name());
-    contentPart.setBody(file->content);
-    multiPart->append(contentPart);
-
-    auto json = Utils::executeForm(uploadUrl, multiPart, Utils::PUT);
+    auto json = Utils::executeForm(uploadUrl, Utils::generateMultipart(file), Utils::PUT);
     return Utils::checkResponse(Response(json.object()));
 }
 
