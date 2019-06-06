@@ -59,8 +59,11 @@ public:
      * \param token
      * \param sslConfig
      */
-    static void init(const QSslConfiguration &sslConfig) {
+    static void init(const QSslConfiguration &sslConfig, bool local) {
         sslConfiguration = sslConfig;
+        if (local) {
+            serverAddr = "http://127.0.0.1:3000";
+        }
     }
 
     /*!
@@ -144,6 +147,7 @@ public:
 
 private:
     static User user; /**< User needed for API accessing */
+    static QString serverAddr;
     static QSslConfiguration sslConfiguration; /**< An SSL configuration to perform an encrypted connection */
 
     /*!
