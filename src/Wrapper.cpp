@@ -122,7 +122,7 @@ Entity *Wrapper::Section<Entity>::get(unsigned id) {
 }
 
 template<>
-bool Wrapper::Section<File>::upload(const File *file) {
+int Wrapper::Section<File>::upload(const File *file) {
     auto uploadUrl = QUrl(
             QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
@@ -131,13 +131,17 @@ bool Wrapper::Section<File>::upload(const File *file) {
             )
     );
     auto json = Utils::executeForm(uploadUrl, Utils::generateMultipart(file), Utils::POST);
-    return Utils::checkResponse(Response(json.object()));
+    if (Utils::checkResponse(Response(json.object()))) {
+        return json.object()["created_id"].toInt();
+    } else {
+        return -1;
+    }
 }
 
 template<>
-bool Wrapper::Section<Package>::upload(const Package *pkg) {
+int Wrapper::Section<Package>::upload(const Package *pkg) {
     auto updateUrl = QUrl(
-            QString("https://antarctica-server.tk/api/user/%1/%2s/%3").arg(
+            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken
@@ -150,11 +154,15 @@ bool Wrapper::Section<Package>::upload(const Package *pkg) {
     formData.addQueryItem("repo_id", QString::number(pkg->repository->id));
 
     auto json = Utils::executeForm(updateUrl, formData, Utils::POST);
-    return Utils::checkResponse(Response(json.object()));
+    if (Utils::checkResponse(Response(json.object()))) {
+        return json.object()["created_id"].toInt();
+    } else {
+        return -1;
+    }
 }
 
 template<>
-bool Wrapper::Section<Repository>::upload(const Repository *repo) {
+int Wrapper::Section<Repository>::upload(const Repository *repo) {
     auto updateUrl = QUrl(
             QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
@@ -170,7 +178,11 @@ bool Wrapper::Section<Repository>::upload(const Repository *repo) {
     formData.addQueryItem("manager", repo->manager);
 
     auto json = Utils::executeForm(updateUrl, formData, Utils::POST);
-    return Utils::checkResponse(Response(json.object()));
+    if (Utils::checkResponse(Response(json.object()))) {
+        return json.object()["created_id"].toInt();
+    } else {
+        return -1;
+    }
 }
 
 template<>
@@ -235,6 +247,29 @@ bool Wrapper::Section<Entity>::remove(unsigned id) {
     );
     auto json = Utils::execute(deleteFileUrl, Utils::DELETE);
     return Utils::checkResponse(Response(json.object()));
+}
+
+QList<File *> Wrapper::Packages::getConfigs(unsigned id) {
+    auto getConfigsUrl = QUrl(
+            QString(Wrapper::serverAddr + "/api/user/%1/pkg/%2/configs/%3").arg(
+                    QString::number(user.id),
+                    QString::number(id),
+                    user.accessToken
+            )
+    );
+    auto json = Utils::execute(getConfigsUrl, Utils::GET);
+
+    QList<File *> configs;
+    if (Utils::checkResponse(Response(json.object()))) {
+        auto respJson = json["files"].toArray();
+        for (auto &&val : respJson) {
+            if (val.isObject()) {
+                auto fileJson = val.toObject();
+                configs << new File(fileJson);
+            }
+        }
+    }
+    return configs;
 }
 
 // tell the compiler to "implement" methods from super class

@@ -44,7 +44,8 @@ public:
                   || (respJson.contains("pkg") && respJson["pkg"].isObject())
                   || (respJson.contains("repos") && respJson["repos"].isArray())
                   || (respJson.contains("repo") && respJson["repo"].isObject())
-                  || (respJson.contains("user") && respJson["user"].isObject()))) {
+                  || (respJson.contains("user") && respJson["user"].isObject())
+                  || (respJson.contains("created_id")))) {
             ok = false;
             error = Error(Error::Code::MissingFields);
         }

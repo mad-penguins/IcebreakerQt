@@ -104,7 +104,7 @@ public:
         * \param entity An entity to upload
         * \return Request status: ok or failed
         */
-        static bool upload(const Entity *entity);
+        static int upload(const Entity *entity);
 
         /*!
         * \brief Wrapper for udate API methods (PUT request to "files", "pkgs" or "repos")
@@ -135,6 +135,8 @@ public:
     * \brief Wrapper for packages API section
     */
     class Packages : public Section<Package> {
+    public:
+        static QList<File *> getConfigs(unsigned id);
     };
 
 

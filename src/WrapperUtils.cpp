@@ -114,6 +114,11 @@ QHttpMultiPart *Wrapper::Utils::generateMultipart(const File *file) {
     modifiedTimePart.setBody(QByteArray::number(file->modified.toSecsSinceEpoch()));
     multiPart->append(modifiedTimePart);
 
+    QHttpPart packageIDPart;
+    packageIDPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="package_id")"));
+    packageIDPart.setBody(QByteArray::number(file->package->id));
+    multiPart->append(packageIDPart);
+
     QHttpPart fileDataPart;
     fileDataPart.setHeader(
             QNetworkRequest::ContentDispositionHeader,

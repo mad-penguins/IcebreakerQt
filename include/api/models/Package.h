@@ -40,12 +40,15 @@ using namespace std;
 class Package : public Entity {
     static Package _default;
 public:
-    int id;
+    int id{};
     QString name;
     Repository *repository{};
 
     explicit Package(int id, QString name, const Repository *repo = Repository::NoRepo)
             : id(id), name(move(name)), repository(const_cast<Repository *>(repo)) {}
+
+    explicit Package(QString name, const Repository *repo = Repository::NoRepo)
+            : name(move(name)), repository(const_cast<Repository *>(repo)) {}
 
     explicit Package(QJsonObject pkgJson) {
         id = pkgJson["id"].toInt();
