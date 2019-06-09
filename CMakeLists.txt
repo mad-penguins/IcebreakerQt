@@ -9,7 +9,7 @@ find_package(Qt5Network REQUIRED)
 
 include_directories(include/api)
 
-add_library(icebreaker SHARED ${SOURCE_FILES})
+add_library(icebreaker STATIC ${SOURCE_FILES})
 
 target_include_directories(icebreaker PUBLIC include)
 target_link_libraries(icebreaker Qt5::Core Qt5::Network)
