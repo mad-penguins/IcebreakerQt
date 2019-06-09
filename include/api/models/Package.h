@@ -56,7 +56,7 @@ public:
         repository = new Repository(pkgJson["repository"].toObject());
     }
 
-    static constexpr Package *Default = &_default;
+    inline static constexpr Package *Default = &_default;
 };
 
 

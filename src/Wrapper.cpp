@@ -28,6 +28,7 @@
 
 
 #include <QtCore/QUrl>
+#include <QtCore/QMap>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
@@ -42,10 +43,6 @@
 Package Package::_default = Package(1, "");
 Repository Repository::_noRepo = Repository(1, "", "", "");
 Repository Repository::_default = Repository(2, "Default", "", "");
-
-User Wrapper::user = User();
-QString Wrapper::serverAddr = "https://antarctica-server.tk";
-QSslConfiguration Wrapper::sslConfiguration = QSslConfiguration::defaultConfiguration();
 
 User Wrapper::authorize(const QString &login, const QString &password) {
     auto loginUrl = QUrl(Wrapper::serverAddr + "/api/login");
@@ -80,7 +77,7 @@ template<> QString Wrapper::Section<Package>::prefix = "pkg";
 template<> QString Wrapper::Section<Repository>::prefix = "repo";
 
 template<class Entity>
-QList<Entity *> Wrapper::Section<Entity>::getAll() {
+const QList<Entity *> Wrapper::Section<Entity>::getAll() {
     auto getUrl = QUrl(
             QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
@@ -96,6 +93,54 @@ QList<Entity *> Wrapper::Section<Entity>::getAll() {
             if (val.isObject()) {
                 auto fileJson = val.toObject();
                 objects << new Entity(fileJson);
+            }
+        }
+    }
+    return objects;
+}
+
+template<class Entity>
+const QMap<QString, Entity *> Wrapper::Section<Entity>::getAllMapped() {
+    auto getUrl = QUrl(
+            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+                    QString::number(user.id),
+                    prefix,
+                    user.accessToken)
+    );
+    auto json = Utils::execute(getUrl, Utils::GET);
+
+    QMap<QString, Entity *> objects;
+    if (Utils::checkResponse(Response(json.object()))) {
+        auto respJson = json[prefix + "s"].toArray();
+        for (auto &&val : respJson) {
+            if (val.isObject()) {
+                auto entityJson = val.toObject();
+                auto entity = new Entity(entityJson);
+                objects.insert(entity->name, entity);
+            }
+        }
+    }
+    return objects;
+}
+
+template<>
+const QMap<QString, File *> Wrapper::Section<File>::getAllMapped() {
+    auto getUrl = QUrl(
+            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+                    QString::number(user.id),
+                    prefix,
+                    user.accessToken)
+    );
+    auto json = Utils::execute(getUrl, Utils::GET);
+
+    QMap<QString, File *> objects;
+    if (Utils::checkResponse(Response(json.object()))) {
+        auto respJson = json[prefix + "s"].toArray();
+        for (auto &&val : respJson) {
+            if (val.isObject()) {
+                auto fileJson = val.toObject();
+                auto file = new File(fileJson);
+                objects.insert(QString(file->path + "/" + file->name), file);
             }
         }
     }

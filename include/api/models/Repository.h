@@ -42,10 +42,13 @@ class Repository : public Entity {
     static Repository _default;
 
 public:
-    int id;
+    int id{};
     QString name;
     QString url;
     QString manager;
+
+    explicit Repository(QString name, QString url, QString manager)
+            : name(move(name)), url(move(url)), manager(move(manager)) {}
 
     explicit Repository(int id, QString name, QString url, QString manager)
             : id(id), name(move(name)), url(move(url)), manager(move(manager)) {}
@@ -57,10 +60,9 @@ public:
         manager = repoJson["manager"].toString();
     }
 
-    static constexpr Repository *NoRepo = &Repository::_noRepo;
-    static constexpr Repository *Default = &Repository::_default;
+    inline static constexpr Repository *NoRepo = &Repository::_noRepo;
+    inline static constexpr Repository *Default = &Repository::_default;
 };
-
 
 
 #endif //ANTARCTICA_REPOSITORY_H

@@ -69,7 +69,7 @@ public:
         name = fileJson["name"].toString();
         path = fileJson["path"].toString();
         if (path.endsWith('/')) {
-            path.remove(path.size()-1, 1);
+            path.remove(path.size() - 1, 1);
         }
         content = QByteArray::fromBase64(fileJson["content"].toVariant().toByteArray());
         created = fileJson["created"].toVariant().toDateTime();

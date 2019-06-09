@@ -88,7 +88,14 @@ public:
         * \tparam Entity Entity type: File, Package or Repository
         * \return List of found entities
         */
-        static QList<Entity *> getAll();
+        static const QList<Entity *> getAll();
+
+        /*!
+        * \brief Wrapper for get all API methods (GET request to "files", "pkgs" or "repos") wrapped into hashmap
+        * \tparam Entity Entity type: File, Package or Repository
+        * \return List of found entities
+        */
+        static const QMap<QString, Entity *> getAllMapped();
 
         /*!
         * \brief Wrapper for get API methods (GET request to "file/{id}", "pkg/{id}" or "repo/{id}")
@@ -148,9 +155,9 @@ public:
     };
 
 private:
-    static User user; /**< User needed for API accessing */
-    static QString serverAddr;
-    static QSslConfiguration sslConfiguration; /**< An SSL configuration to perform an encrypted connection */
+    inline static User user; /**< User needed for API accessing */
+    inline static QString serverAddr = "https://antarctica-server.tk";
+    inline static QSslConfiguration sslConfiguration = QSslConfiguration::defaultConfiguration(); /**< An SSL configuration to perform an encrypted connection */
 
     /*!
      * \class APIWrapper::Utils
@@ -195,7 +202,7 @@ private:
             return true;
         }
 
-        static QHttpMultiPart *generateMultipart(const File* file);
+        static QHttpMultiPart *generateMultipart(const File *file);
     };
 
 };
