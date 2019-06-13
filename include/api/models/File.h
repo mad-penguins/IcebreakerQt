@@ -1,5 +1,5 @@
 /*!
- * \file models/File.h
+ * \file
  * \author Nikita Mironov <nickfrom22nd@gmail.com>
  * \brief The file entity for wrapping API responses
  *
@@ -42,6 +42,10 @@
 
 using namespace std;
 
+/*!
+ * \class File
+ * \brief The file entity for wrapping API responses
+ */
 class File : public Entity {
 public:
     int id{};
@@ -52,18 +56,42 @@ public:
     QDateTime modified;
     Package *package;
 
-    File(QString name, QString path, QDateTime created, QDateTime modified,
-         QByteArray content = QByteArray(), const Package *pkg = Package::Default)
-            : name(move(name)), path(move(path)),
-              created(move(created)), modified(move(modified)),
-              content(move(content)), package(const_cast<Package *>(pkg)) {}
-
+    /*!
+     * \brief Constructor for wrapping existing packages into a C++ class
+     * \param id File id
+     * \param name File name including extension
+     * \param path Path where file is located
+     * \param created File creation time and date
+     * \param modified Last modified time and date
+     * \param content File content, by default empty
+     * \param pkg Package which file is according to, by default predefined package with id 1
+     */
     File(int id, QString name, QString path, QDateTime created, QDateTime modified,
          QByteArray content = QByteArray(), const Package *pkg = Package::Default)
             : id(id), name(move(name)), path(move(path)),
               created(move(created)), modified(move(modified)),
               content(move(content)), package(const_cast<Package *>(pkg)) {}
 
+    /*!
+     * \brief Constructor for generating new Packages for uploading into server
+     * \param id File id
+     * \param name File name including extension
+     * \param path Path where file is located
+     * \param created File creation time and date
+     * \param modified Last modified time and date
+     * \param content File content, by default empty
+     * \param pkg Package which file is according to, by default predefined package with id 1
+     */
+    File(QString name, QString path, QDateTime created, QDateTime modified,
+         QByteArray content = QByteArray(), const Package *pkg = Package::Default)
+            : name(move(name)), path(move(path)),
+              created(move(created)), modified(move(modified)),
+              content(move(content)), package(const_cast<Package *>(pkg)) {}
+
+    /*!
+     * \brief Constructor for wrapping server JSON responses into a C++ class
+     * \param fileJson A JSON response from server containing a file object
+     */
     explicit File(QJsonObject &fileJson) {
         id = fileJson["id"].toInt();
         name = fileJson["name"].toString();

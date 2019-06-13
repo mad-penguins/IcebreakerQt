@@ -1,5 +1,5 @@
 /*!
- * \file models/Package.h
+ * \file
  * \author Nikita Mironov <nickfrom22nd@gmail.com>
  * \brief The package entity for wrapping API responses
  *
@@ -37,6 +37,10 @@
 
 using namespace std;
 
+/*!
+ * \class Package
+ * \brief The package entity for wrapping API responses
+ */
 class Package : public Entity {
     static Package _default;
 public:
@@ -44,18 +48,36 @@ public:
     QString name;
     Repository *repository{};
 
+    /*!
+     * \brief Constructor for wrapping existing packages into a C++ class
+     * \param id Package id
+     * \param name Package name
+     * \param repo Repository where the package according to, by default package has no repository
+     */
     explicit Package(int id, QString name, const Repository *repo = Repository::NoRepo)
             : id(id), name(move(name)), repository(const_cast<Repository *>(repo)) {}
 
+    /*!
+     * \brief Constructor for generating new Packages for uploading into server
+     * \param name Package name
+     * \param repo Repository where the package according to, by default package has no repository
+     */
     explicit Package(QString name, const Repository *repo = Repository::NoRepo)
             : name(move(name)), repository(const_cast<Repository *>(repo)) {}
 
+    /*!
+     * \brief Constructor for wrapping server JSON responses into a C++ class
+     * \param pkgJson A JSON response from server containing a package object
+     */
     explicit Package(QJsonObject pkgJson) {
         id = pkgJson["id"].toInt();
         name = pkgJson["name"].toString();
         repository = new Repository(pkgJson["repository"].toObject());
     }
 
+    /*!
+     * \brief Predefined default package (id 1) entity for user files
+     */
     inline static constexpr Package *Default = &_default;
 };
 

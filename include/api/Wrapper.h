@@ -1,5 +1,5 @@
 /*!
- * \file utils/api/APIWrapper.h
+ * \file
  * \author Nikita Mironov <nickfrom22nd@gmail.com>
  * \brief The API wrapper class
  *
@@ -68,8 +68,9 @@ public:
 
     /*!
      * \brief Authorize the user
-     * \param login
-     * \param password
+     * \param login username
+     * \param password user's password
+     * \return User entity created from login server response
      */
     static User authorize(const QString &login, const QString &password);
 
@@ -93,7 +94,7 @@ public:
         /*!
         * \brief Wrapper for get all API methods (GET request to "files", "pkgs" or "repos") wrapped into hashmap
         * \tparam Entity Entity type: File, Package or Repository
-        * \return List of found entities
+        * \return Mapped found entities
         */
         static const QMap<QString, Entity *> getAllMapped();
 
@@ -109,7 +110,7 @@ public:
         * \brief Wrapper for upload API methods (POST request to "files", "pkgs" or "repos")
         * \tparam Entity Entity type: File, Package or Repository
         * \param entity An entity to upload
-        * \return Request status: ok or failed
+        * \return Request status: recently created entity id
         */
         static int upload(const Entity *entity);
 
@@ -143,6 +144,11 @@ public:
     */
     class Packages : public Section<Package> {
     public:
+        /*!
+         * \brief Wrapper for package getConfigs method
+         * \param id Package id
+         * \return List of files marked as given package's configs
+         */
         static QList<File *> getConfigs(unsigned id);
     };
 
@@ -196,7 +202,7 @@ private:
 
         static bool checkResponse(const Response &resp) {
             if (!resp.ok) {
-                qDebug() << "Error code " << resp.error.code << ": " << resp.error.text;
+                qDebug() << "Error code " << static_cast<int>(resp.error.code) << ": " << resp.error.text;
                 return false;
             }
             return true;

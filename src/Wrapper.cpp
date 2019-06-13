@@ -1,5 +1,5 @@
 /*!
- * \file utils/api/APIWrapper.cpp
+ * \file
  * \author Nikita Mironov <nickfrom22nd@gmail.com>
  * \brief The API wrapper implementation
  *
@@ -40,6 +40,7 @@
 #include "Wrapper.h"
 #include "models/Response.hpp"
 
+// initialize static predefined entitties
 Package Package::_default = Package(1, "");
 Repository Repository::_noRepo = Repository(1, "", "", "");
 Repository Repository::_default = Repository(2, "Default", "", "");
@@ -64,7 +65,7 @@ User Wrapper::authorize(const QString &login, const QString &password) {
         && !userJson.keys().contains("login")
         && !userJson.keys().contains("name")
         && !userJson.keys().contains("token")) {
-        throw Response::Exception(Response::Error::MissingFields);
+        throw Response::Exception(Response::Error::Code::MissingFields);
     }
     auto usr = User(userJson);
     Wrapper::user = usr;

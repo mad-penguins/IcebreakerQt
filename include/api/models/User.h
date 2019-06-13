@@ -1,5 +1,5 @@
 /*!
- * \file models/User.h
+ * \file
  * \author Nikita Mironov <nickfrom22nd@gmail.com>
  * \brief The user entity for wrapping API responses
  *
