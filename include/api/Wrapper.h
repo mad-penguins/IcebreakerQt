@@ -52,6 +52,8 @@ using namespace std;
  * Files, Packages and Repositories for interaction with specified API sections.
 */
 class Wrapper {
+    inline static QString serverAddr = "https://antarctica-server.tk";
+
 public:
     /*!
      * \brief Set authentication data to static storage
@@ -104,7 +106,7 @@ public:
         * \param id ID of entity to search
         * \return Found entity
         */
-        static Entity *get(unsigned id);
+        static Entity *get(int id);
 
         /*!
         * \brief Wrapper for upload API methods (POST request to "files", "pkgs" or "repos")
@@ -115,7 +117,7 @@ public:
         static int upload(const Entity *entity);
 
         /*!
-        * \brief Wrapper for udate API methods (PUT request to "files", "pkgs" or "repos")
+        * \brief Wrapper for update API methods (PUT request to "files", "pkgs" or "repos")
         * \tparam Entity Entity type: File, Package or Repository
         * \param entity An entity to update
         * \return Request status: ok or failed
@@ -128,7 +130,7 @@ public:
         * \param id ID of entity to delete
         * \return Request status ok or failed
         */
-        static bool remove(unsigned id);
+        static bool remove(int id);
     };
 
     /*!
@@ -149,7 +151,7 @@ public:
          * \param id Package id
          * \return List of files marked as given package's configs
          */
-        static QList<File *> getConfigs(unsigned id);
+        static QList<File *> getConfigs(int id);
     };
 
 
@@ -162,7 +164,6 @@ public:
 
 private:
     inline static User user; /**< User needed for API accessing */
-    inline static QString serverAddr = "https://antarctica-server.tk";
     inline static QSslConfiguration sslConfiguration = QSslConfiguration::defaultConfiguration(); /**< An SSL configuration to perform an encrypted connection */
 
     /*!

@@ -81,6 +81,8 @@ public:
         manager = repoJson["manager"].toString();
     }
 
+    ~Repository() override = default;
+
     /*!
      * \brief Predefined no repository (id 1) entity for user files
      */

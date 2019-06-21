@@ -40,13 +40,13 @@
 #include "Wrapper.h"
 #include "models/Response.hpp"
 
-// initialize static predefined entitties
+// initialize static predefined entities
 Package Package::_default = Package(1, "");
 Repository Repository::_noRepo = Repository(1, "", "", "");
 Repository Repository::_default = Repository(2, "Default", "", "");
 
 User Wrapper::authorize(const QString &login, const QString &password) {
-    auto loginUrl = QUrl(Wrapper::serverAddr + "/api/login");
+    auto loginUrl = QUrl(serverAddr + "/api/login");
 
     QUrlQuery formData;
     formData.addQueryItem("login", login);
@@ -80,7 +80,7 @@ template<> QString Wrapper::Section<Repository>::prefix = "repo";
 template<class Entity>
 const QList<Entity *> Wrapper::Section<Entity>::getAll() {
     auto getUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken)
@@ -103,7 +103,7 @@ const QList<Entity *> Wrapper::Section<Entity>::getAll() {
 template<class Entity>
 const QMap<QString, Entity *> Wrapper::Section<Entity>::getAllMapped() {
     auto getUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken)
@@ -127,7 +127,7 @@ const QMap<QString, Entity *> Wrapper::Section<Entity>::getAllMapped() {
 template<>
 const QMap<QString, File *> Wrapper::Section<File>::getAllMapped() {
     auto getUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken)
@@ -149,9 +149,9 @@ const QMap<QString, File *> Wrapper::Section<File>::getAllMapped() {
 }
 
 template<class Entity>
-Entity *Wrapper::Section<Entity>::get(unsigned id) {
+Entity *Wrapper::Section<Entity>::get(int id) {
     auto getUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2/%3/%4").arg(
+            QString(serverAddr + "/api/user/%1/%2/%3/%4").arg(
                     QString::number(user.id),
                     prefix,
                     QString::number(id),
@@ -170,7 +170,7 @@ Entity *Wrapper::Section<Entity>::get(unsigned id) {
 template<>
 int Wrapper::Section<File>::upload(const File *file) {
     auto uploadUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken
@@ -187,7 +187,7 @@ int Wrapper::Section<File>::upload(const File *file) {
 template<>
 int Wrapper::Section<Package>::upload(const Package *pkg) {
     auto updateUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken
@@ -210,7 +210,7 @@ int Wrapper::Section<Package>::upload(const Package *pkg) {
 template<>
 int Wrapper::Section<Repository>::upload(const Repository *repo) {
     auto updateUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken
@@ -234,7 +234,7 @@ int Wrapper::Section<Repository>::upload(const Repository *repo) {
 template<>
 bool Wrapper::Section<File>::update(const File *file) {
     auto uploadUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken
@@ -247,7 +247,7 @@ bool Wrapper::Section<File>::update(const File *file) {
 template<>
 bool Wrapper::Section<Package>::update(const Package *pkg) {
     auto updateUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken
@@ -265,7 +265,7 @@ bool Wrapper::Section<Package>::update(const Package *pkg) {
 template<>
 bool Wrapper::Section<Repository>::update(const Repository *repo) {
     auto updateUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
                     QString::number(user.id),
                     prefix,
                     user.accessToken
@@ -282,9 +282,9 @@ bool Wrapper::Section<Repository>::update(const Repository *repo) {
 }
 
 template<class Entity>
-bool Wrapper::Section<Entity>::remove(unsigned id) {
+bool Wrapper::Section<Entity>::remove(int id) {
     auto deleteFileUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/%2/%3/%4").arg(
+            QString(serverAddr + "/api/user/%1/%2/%3/%4").arg(
                     QString::number(user.id),
                     prefix,
                     QString::number(id),
@@ -295,9 +295,9 @@ bool Wrapper::Section<Entity>::remove(unsigned id) {
     return Utils::checkResponse(Response(json.object()));
 }
 
-QList<File *> Wrapper::Packages::getConfigs(unsigned id) {
+QList<File *> Wrapper::Packages::getConfigs(int id) {
     auto getConfigsUrl = QUrl(
-            QString(Wrapper::serverAddr + "/api/user/%1/pkg/%2/configs/%3").arg(
+            QString(serverAddr + "/api/user/%1/pkg/%2/configs/%3").arg(
                     QString::number(user.id),
                     QString::number(id),
                     user.accessToken

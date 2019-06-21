@@ -75,6 +75,8 @@ public:
         repository = new Repository(pkgJson["repository"].toObject());
     }
 
+    ~Package() override = default;
+
     /*!
      * \brief Predefined default package (id 1) entity for user files
      */

@@ -104,6 +104,8 @@ public:
         modified = fileJson["modified"].toVariant().toDateTime();
         package = new Package(fileJson["package"].toObject());
     }
+
+    ~File() override = default;
 };
 
 

@@ -33,7 +33,7 @@
 #include <QtCore/QJsonObject>
 
 /*!
- * \class Resposnse
+ * \class Response
  * \brief The response entity for wrapping and checking API responses
  */
 class Response {
@@ -41,8 +41,8 @@ public:
     bool ok;
 
     /*!
-     * \class Reponse::Error
-     * \brief Class describing an error in reponse
+     * \class Response::Error
+     * \brief Class describing an error in response
      */
     class Error {
     public:
@@ -58,7 +58,7 @@ public:
             WrongLogin = 5, ///< Wrong login data (username or password)
             OK = 0, ///< OK
             NoResponse = -1, ///< Got no response from server
-            MissingFields = -2 ///< Got a response, but some fields are mising
+            MissingFields = -2 ///< Got a response, but some fields are missing
         } code = Code::NoResponse;
         QString text = "got no response";
 
@@ -78,7 +78,7 @@ public:
 
     /*!
      * \class Response::Exception
-     * \brief Class which describes an exception to throw in cause of response containig an error
+     * \brief Class which describes an exception to throw in cause of response containing an error
      */
     class Exception : public exception {
     public:

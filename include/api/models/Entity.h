@@ -35,7 +35,9 @@
  */
 class Entity {
 public:
-    virtual ~Entity() = default;
+    virtual ~Entity() = 0;
 };
+
+inline Entity::~Entity() = default;
 
 #endif //ANTARCTICA_ENTITY_H
