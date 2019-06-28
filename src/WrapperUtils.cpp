@@ -133,6 +133,11 @@ QHttpMultiPart *Wrapper::Utils::generateMultipart(const File *file) {
     pathPart.setBody(file->path.toUtf8());
     multiPart->append(pathPart);
 
+    QHttpPart checksumPart;
+    checksumPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="checksum")"));
+    checksumPart.setBody(file->checksum);
+    multiPart->append(checksumPart);
+
     QHttpPart createdTimePart;
     createdTimePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="created")"));
     createdTimePart.setBody(QByteArray::number(file->created.toSecsSinceEpoch()));

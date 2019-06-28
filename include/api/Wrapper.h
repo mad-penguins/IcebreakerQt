@@ -138,6 +138,13 @@ public:
     * \brief Wrapper for files API section
     */
     class Files : public Section<File> {
+    public:
+        /*!
+         * \brief Wrapper for getting contents of a specific file
+         * \param id File id
+         * \return File contents
+         */
+        static QByteArray getContent(int id);
     };
 
     /*!

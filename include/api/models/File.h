@@ -52,6 +52,7 @@ public:
     QString name;
     QString path;
     QByteArray content;
+    QByteArray checksum;
     QDateTime created;
     QDateTime modified;
     Package *package;
@@ -66,9 +67,9 @@ public:
      * \param content File content, by default empty
      * \param pkg Package which file is according to, by default predefined package with id 1
      */
-    File(int id, QString name, QString path, QDateTime created, QDateTime modified,
+    File(int id, QString name, QString path, QByteArray checksum, QDateTime created, QDateTime modified,
          QByteArray content = QByteArray(), const Package *pkg = Package::Default)
-            : id(id), name(move(name)), path(move(path)),
+            : id(id), name(move(name)), path(move(path)), checksum(move(checksum)),
               created(move(created)), modified(move(modified)),
               content(move(content)), package(const_cast<Package *>(pkg)) {}
 
@@ -82,9 +83,9 @@ public:
      * \param content File content, by default empty
      * \param pkg Package which file is according to, by default predefined package with id 1
      */
-    File(QString name, QString path, QDateTime created, QDateTime modified,
+    File(QString name, QString path, QByteArray checksum, QDateTime created, QDateTime modified,
          QByteArray content = QByteArray(), const Package *pkg = Package::Default)
-            : name(move(name)), path(move(path)),
+            : name(move(name)), path(move(path)), checksum(move(checksum)),
               created(move(created)), modified(move(modified)),
               content(move(content)), package(const_cast<Package *>(pkg)) {}
 
@@ -100,6 +101,7 @@ public:
             path.remove(path.size() - 1, 1);
         }
         content = QByteArray::fromBase64(fileJson["content"].toVariant().toByteArray());
+        checksum = fileJson["checksum"].toVariant().toByteArray();
         created = fileJson["created"].toVariant().toDateTime();
         modified = fileJson["modified"].toVariant().toDateTime();
         package = new Package(fileJson["package"].toObject());

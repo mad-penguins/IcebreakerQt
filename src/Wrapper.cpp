@@ -164,7 +164,6 @@ Entity *Wrapper::Section<Entity>::get(int id) {
     }
     auto respJson = json[prefix].toObject();
     return new Entity(respJson);
-
 }
 
 template<>
@@ -293,6 +292,26 @@ bool Wrapper::Section<Entity>::remove(int id) {
     );
     auto json = Utils::execute(deleteFileUrl, Utils::DELETE);
     return Utils::checkResponse(Response(json.object()));
+}
+
+QByteArray Wrapper::Files::getContent(int id) {
+    auto getContentUrl = QUrl(
+            QString(serverAddr + "/api/user/%1/file/%2/content/%3").arg(
+                    QString::number(user.id),
+                    QString::number(id),
+                    user.accessToken
+            )
+    );
+    auto json = Utils::execute(getContentUrl, Utils::GET);
+    if (!Utils::checkResponse(Response(json.object()))) {
+        return nullptr;
+    }
+    auto respJson = json[prefix].toObject();
+
+    File file(respJson);
+    auto content = move(file.content);
+
+    return QByteArray::fromBase64(content);
 }
 
 QList<File *> Wrapper::Packages::getConfigs(int id) {
