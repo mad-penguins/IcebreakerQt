@@ -36,6 +36,7 @@
 #include <utility>
 #include <QtCore/QJsonObject>
 #include <QtCore/QVariant>
+#include <QtCore/QDir>
 
 #include "Package.h"
 #include "Entity.h"
@@ -105,6 +106,18 @@ public:
         created = fileJson["created"].toVariant().toDateTime();
         modified = fileJson["modified"].toVariant().toDateTime();
         package = new Package(fileJson["package"].toObject());
+    }
+
+    inline const QString getAbsolutePath() const {
+        return QString(path).replace("~", QDir::homePath());
+    };
+
+    inline const QString getAbsoluteName() const {
+        return QString(path+"/"+name).replace("~", QDir::homePath());
+    }
+
+    inline const QString getRelativeName() const {
+        return QString(path+"/"+name);
     }
 
     ~File() override = default;

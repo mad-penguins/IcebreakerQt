@@ -141,7 +141,7 @@ const QMap<QString, File *> Wrapper::Section<File>::getAllMapped() {
             if (val.isObject()) {
                 auto fileJson = val.toObject();
                 auto file = new File(fileJson);
-                objects.insert(QString(file->path + "/" + file->name), file);
+                objects.insert(file->getRelativeName(), file);
             }
         }
     }
@@ -233,9 +233,10 @@ int Wrapper::Section<Repository>::upload(const Repository *repo) {
 template<>
 bool Wrapper::Section<File>::update(const File *file) {
     auto uploadUrl = QUrl(
-            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2/%3/%4").arg(
                     QString::number(user.id),
                     prefix,
+                    QString::number(file->id),
                     user.accessToken
             )
     );
@@ -246,9 +247,10 @@ bool Wrapper::Section<File>::update(const File *file) {
 template<>
 bool Wrapper::Section<Package>::update(const Package *pkg) {
     auto updateUrl = QUrl(
-            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2/%3/%4").arg(
                     QString::number(user.id),
                     prefix,
+                    QString::number(pkg->id),
                     user.accessToken
             )
     );
@@ -264,9 +266,10 @@ bool Wrapper::Section<Package>::update(const Package *pkg) {
 template<>
 bool Wrapper::Section<Repository>::update(const Repository *repo) {
     auto updateUrl = QUrl(
-            QString(serverAddr + "/api/user/%1/%2s/%3").arg(
+            QString(serverAddr + "/api/user/%1/%2/%3/%4").arg(
                     QString::number(user.id),
                     prefix,
+                    QString::number(repo->id),
                     user.accessToken
             )
     );
