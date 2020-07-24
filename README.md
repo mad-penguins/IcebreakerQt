@@ -7,7 +7,7 @@ Our wiki contains the best [reference](https://github.com/mad-penguins/Icebreake
 
 Our [official client](https://github.com/mad-penguins/Antarctica) uses this wrapper as a git submodule, so this project is officially maintainable.
 
-## Build
+## Build & use
 Icebreaker is build with Qt framework and based on CMake build system.
 So, you need to install cmake binary, C++ compiler with C++17 standard support and Qt5 runtime and development packages.
 
